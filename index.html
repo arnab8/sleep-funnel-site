@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- build: 2026-03-12 14:30 -->
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sleep Debt Calculator — Respond Under Pressure</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#111111;--white:#ffffff;--cream:#f8f5f0;--warm:#f2ede6;
+  --red:#c0392b;--red-dk:#9c2f23;--muted:#888480;--border:#ddd8d0;
+  --text:#1a1a1a;--sub:#555250;--serif:'Playfair Display',Georgia,serif;
+  --sans:'Inter',system-ui,sans-serif;--mono:'DM Mono',monospace;--max:720px;
+}
+body{background:var(--white);color:var(--text);font-family:var(--sans);font-size:17px;line-height:1.65;min-height:100vh;overflow-x:hidden}
+
+/* TOPBAR */
+.topbar{border-bottom:1px solid var(--border);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;background:var(--white)}
+.topbar-brand{font-family:var(--serif);font-size:15px;font-weight:700;color:var(--black);text-decoration:none}
+.topbar-brand span{color:var(--red)}
+.topbar-tag{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+@media(max-width:500px){.topbar-tag{display:none}}
+
+/* GATE */
+.gate-overlay{position:fixed;inset:0;z-index:100;background:var(--white);overflow-y:auto;display:flex;flex-direction:column}
+.gate-overlay.hidden{display:none}
+.gate-topbar{border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.gate-topbar-brand{font-family:var(--serif);font-size:15px;font-weight:700;color:var(--black);text-decoration:none}
+.gate-topbar-brand span{color:var(--red)}
+.gate-topbar-tag{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.gate-body{flex:1;display:grid;grid-template-columns:1fr 1fr;max-width:1060px;margin:0 auto;width:100%;padding:60px 32px;gap:72px;align-items:start}
+.gate-mobile-hook{display:none}
+@media(max-width:780px){
+  .gate-body{grid-template-columns:1fr;gap:0;padding:0}
+  .gate-pitch{order:2;padding:24px 20px 32px}
+  .gate-form-wrap{order:1;border-radius:0;border-left:none;border-right:none;border-top:none;padding:20px 20px 24px}
+  .gate-subhead{display:none}
+  .gate-bullets{display:none}
+  .gate-science-badge{display:none}
+  .gate-coach{display:none}
+  .gate-eyebrow{display:none}
+  .gate-headline{display:none}
+  .gate-form-title{font-size:20px;margin-bottom:5px}
+  .gate-mobile-hook{display:block}
+  .gate-desktop-proof{display:none}
+}
+
+/* GATE LEFT */
+.gate-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:18px}
+.gate-headline{font-family:var(--serif);font-size:clamp(26px,3.8vw,42px);font-weight:900;line-height:1.1;color:var(--black);margin-bottom:18px}
+.gate-headline em{font-style:italic;color:var(--red)}
+.gate-subhead{font-size:16px;color:var(--sub);line-height:1.75;margin-bottom:28px;max-width:440px}
+.gate-bullets{list-style:none;margin-bottom:32px}
+.gate-bullets li{display:flex;gap:12px;align-items:flex-start;font-size:15px;color:var(--sub);margin-bottom:10px;line-height:1.55}
+.gate-bullets li::before{content:"→";color:var(--red);font-weight:700;flex-shrink:0;margin-top:1px}
+
+/* SOCIAL PROOF BLOCK */
+.gate-proof-block{border-top:1px solid var(--border);padding-top:24px;margin-top:8px}
+.gate-proof-headline{font-family:var(--serif);font-size:13px;font-weight:700;color:var(--black);margin-bottom:14px}
+.gate-proof-items{display:flex;flex-direction:column;gap:10px}
+.gate-proof-item{display:flex;align-items:flex-start;gap:10px}
+.gate-proof-icon{font-size:14px;flex-shrink:0;margin-top:2px}
+.gate-proof-text{font-size:13px;color:var(--sub);line-height:1.5}
+
+/* GATE RIGHT — FORM */
+.gate-form-wrap{background:var(--cream);border:1px solid var(--border);border-radius:4px;padding:36px 32px}
+.gate-scarcity{background:var(--black);color:var(--white);border-radius:3px;padding:10px 14px;font-size:13px;margin-bottom:22px;display:flex;align-items:center;gap:8px;line-height:1.45}
+.gate-scarcity strong{color:#f8c4be}
+.gate-scarcity-dot{width:7px;height:7px;background:#c0392b;border-radius:50%;flex-shrink:0;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.gate-form-title{font-family:var(--serif);font-size:20px;font-weight:700;color:var(--black);margin-bottom:4px}
+.gate-form-sub{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.55}
+.gate-form{display:flex;flex-direction:column;gap:14px}
+.gate-field{display:flex;flex-direction:column;gap:5px}
+.gate-label{font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--sub);text-transform:uppercase}
+.gate-label .optional{font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0}
+.gate-input{border:1.5px solid var(--border);border-radius:3px;background:var(--white);padding:11px 13px;font-family:var(--sans);font-size:16px;color:var(--text);outline:none;transition:border-color .15s;width:100%}
+.gate-input::placeholder{color:#bbb8b4}
+.gate-input:focus{border-color:var(--black)}
+.gate-input.error{border-color:var(--red)}
+.gate-error{font-size:12px;color:var(--red);display:none;margin-top:2px}
+.gate-error.visible{display:block}
+.role-hint{font-size:12px;color:var(--muted);margin-bottom:8px}
+.role-pills{display:flex;flex-wrap:wrap;gap:7px}
+.role-pill{padding:7px 13px;border-radius:2px;border:1.5px solid var(--border);background:var(--white);font-family:var(--sans);font-size:13px;color:var(--sub);cursor:pointer;transition:all .12s;line-height:1}
+.role-pill:hover{border-color:var(--black);color:var(--black)}
+.role-pill.active{background:var(--black);border-color:var(--black);color:var(--white)}
+.gate-submit{width:100%;padding:15px;background:var(--red);color:white;font-family:var(--serif);font-size:18px;font-weight:700;border:none;border-radius:3px;cursor:pointer;transition:background .15s,transform .1s;letter-spacing:.01em;margin-top:4px}
+.gate-submit:hover{background:var(--red-dk)}
+.gate-submit:active{transform:translateY(1px)}
+.gate-privacy{font-size:12px;color:var(--muted);text-align:center;margin-top:10px;line-height:1.5}
+
+/* APP BODY */
+.app-body{display:none}
+.app-body.visible{display:block}
+
+/* GREETING */
+.greeting-strip{background:var(--cream);border-bottom:1px solid var(--border);padding:9px 32px;font-size:13px;color:var(--muted);display:none;align-items:center;gap:8px}
+.greeting-strip.visible{display:flex}
+.greeting-strip strong{color:var(--text);font-weight:600}
+
+/* CALC HEADER */
+.calc-header{background:var(--black);color:var(--white);padding:56px 32px 48px;text-align:center}
+.calc-header-brand{font-family:var(--mono);font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:#555;margin-bottom:18px}
+.calc-header-brand span{color:var(--red)}
+.calc-header h1{font-family:var(--serif);font-size:clamp(24px,3.8vw,40px);font-weight:900;line-height:1.15;max-width:660px;margin:0 auto 14px;color:var(--white)}
+.calc-header h1 em{font-style:italic;color:#e88}
+.calc-header-sub{font-size:16px;color:#888;max-width:500px;margin:0 auto;line-height:1.7}
+
+/* PROGRESS BAR */
+.progress-wrap{background:var(--black);padding:0 32px 20px;display:flex;align-items:center;gap:0;max-width:var(--max);margin:0 auto}
+.prog-step{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:default}
+.prog-line{height:2px;background:#333;flex:1;margin-top:10px}
+.prog-dot{width:20px;height:20px;border-radius:50%;border:2px solid #444;background:var(--black);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:8px;color:#555;transition:all .25s;flex-shrink:0}
+.prog-dot.done{background:var(--red);border-color:var(--red);color:white}
+.prog-dot.active{background:var(--white);border-color:var(--white);color:var(--black)}
+.prog-label{font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#444;text-align:center;transition:color .25s;white-space:nowrap}
+.prog-label.active{color:#aaa}
+.prog-label.done{color:#777}
+.progress-row{display:flex;align-items:center;width:100%;gap:0}
+.progress-container{background:var(--black);padding:8px 32px 20px;border-bottom:1px solid #222}
+
+/* MAIN CONTAINER */
+.container{max-width:var(--max);margin:0 auto;padding:48px 24px 100px}
+
+/* SECTION LABELS */
+.section-label{font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.section-label::after{content:"";flex:1;height:1px;background:var(--border)}
+
+/* CARDS */
+.card{border:1px solid var(--border);border-radius:3px;padding:26px;margin-bottom:12px;background:var(--white)}
+.card-title{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--black);margin-bottom:4px}
+.card-desc{font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.65}
+
+/* SLIDERS */
+.slider-row{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;margin-bottom:20px}
+.slider-row:last-child{margin-bottom:0}
+.slider-label{font-size:15px;font-weight:500;color:var(--text);margin-bottom:9px}
+.slider-hint{font-size:12px;color:var(--muted);font-weight:400}
+input[type=range]{-webkit-appearance:none;width:100%;height:3px;border-radius:2px;background:var(--border);outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--black);border:3px solid var(--white);box-shadow:0 0 0 1.5px var(--black);cursor:pointer;transition:transform .12s}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.15)}
+.slider-value{font-family:var(--serif);font-size:24px;font-weight:700;color:var(--black);min-width:72px;text-align:right;white-space:nowrap}
+.slider-value span{font-family:var(--sans);font-size:13px;font-weight:400;color:var(--muted)}
+
+/* TOGGLES */
+.toggle-group{display:flex;gap:7px;flex-wrap:wrap}
+.toggle-btn{padding:8px 15px;border-radius:2px;border:1.5px solid var(--border);background:var(--white);font-family:var(--sans);font-size:14px;cursor:pointer;color:var(--sub);transition:all .12s;font-weight:400}
+.toggle-btn:hover{border-color:var(--black);color:var(--black)}
+.toggle-btn.active{background:var(--black);color:var(--white);border-color:var(--black)}
+
+/* TRIGGERS */
+.triggers-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+@media(max-width:500px){.triggers-grid{grid-template-columns:1fr}}
+.trigger-wrap{display:flex;flex-direction:column}
+.trigger-item{display:flex;align-items:center;gap:10px;padding:10px 13px;border:1.5px solid var(--border);border-radius:3px;cursor:pointer;transition:all .12s;font-size:14px;color:var(--sub);background:var(--white);user-select:none}
+.trigger-item:hover{border-color:var(--black);color:var(--black)}
+.trigger-item.active{border-color:var(--black);background:var(--black);color:var(--white);border-bottom-left-radius:0;border-bottom-right-radius:0;border-bottom-color:transparent}
+.trigger-dot{width:14px;height:14px;border-radius:2px;border:1.5px solid currentColor;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;opacity:.6}
+.trigger-item.active .trigger-dot{opacity:1}
+.freq-selector,.eat-selector{display:none;border:1.5px solid var(--black);border-top:none;border-bottom-left-radius:3px;border-bottom-right-radius:3px;background:#f0f0f0;padding:7px;gap:5px}
+.freq-selector.visible,.eat-selector.visible{display:flex}
+.freq-btn{flex:1;padding:6px 4px;border-radius:2px;border:1px solid var(--border);background:var(--white);font-family:var(--mono);font-size:9px;letter-spacing:.04em;cursor:pointer;color:var(--muted);text-align:center;transition:all .12s;line-height:1.3}
+.freq-btn:hover{border-color:var(--black);color:var(--black)}
+.freq-btn.active{background:var(--red);color:white;border-color:var(--red)}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--border);margin:32px 0}
+
+/* CALC BUTTON */
+.calc-btn{width:100%;padding:17px;background:var(--red);color:white;font-family:var(--serif);font-size:19px;font-weight:700;border:none;border-radius:3px;cursor:pointer;transition:background .15s,transform .1s;margin-top:8px}
+.calc-btn:hover{background:var(--red-dk)}
+.calc-btn:active{transform:translateY(1px)}
+
+/* RESULTS */
+.results-section{display:none}
+.results-section.visible{display:block}
+.results-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:22px;gap:12px;flex-wrap:wrap}
+.results-title{font-family:var(--serif);font-size:24px;font-weight:900;color:var(--black)}
+.recalc-btn{font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;background:var(--black);color:var(--white);border:none;padding:8px 15px;border-radius:2px;cursor:pointer;transition:opacity .15s}
+.recalc-btn:hover{opacity:.7}
+
+/* SCORE GRID */
+.score-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px}
+@media(max-width:500px){.score-grid{grid-template-columns:1fr}}
+.score-card{border:1.5px solid var(--border);border-radius:3px;padding:18px;background:var(--white)}
+.score-card.danger{border-color:#c0392b;background:#fdf5f4}
+.score-card.warning{border-color:#c07820;background:#fdf8ee}
+.score-card.safe{border-color:#27ae60;background:#f0faf4}
+.score-card-label{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.score-card-value{font-family:var(--serif);font-size:36px;font-weight:900;line-height:1;margin-bottom:4px}
+.score-card.danger .score-card-value{color:#c0392b}
+.score-card.warning .score-card-value{color:#c07820}
+.score-card.safe .score-card-value{color:#27ae60}
+.score-card-unit{font-size:12px;color:var(--muted)}
+
+/* IMPAIRMENT BAR */
+.impairment-wrap{border:1px solid var(--border);border-radius:3px;padding:22px;margin-bottom:12px;background:var(--white)}
+.impairment-label{font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.impairment-title{font-family:var(--serif);font-size:17px;font-weight:700;color:var(--black);margin-bottom:14px}
+.bar-track{height:7px;background:var(--border);border-radius:4px;overflow:hidden;margin-bottom:7px}
+.bar-fill{height:100%;border-radius:4px;transition:width .7s cubic-bezier(.4,0,.2,1),background .4s}
+.bar-labels{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:.06em}
+
+/* DIAGNOSIS */
+.diagnosis-card{border-radius:3px;padding:22px;margin-bottom:12px;border-left:4px solid}
+.diagnosis-card.level-critical{background:#fdf5f4;border-color:#c0392b}
+.diagnosis-card.level-high{background:#fdf8ee;border-color:#c07820}
+.diagnosis-card.level-moderate{background:#fefdf0;border-color:#b8a020}
+.diagnosis-card.level-low{background:#f0faf4;border-color:#27ae60}
+.diagnosis-eyebrow{font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.diagnosis-headline{font-family:var(--serif);font-size:19px;font-weight:700;color:var(--black);margin-bottom:9px;line-height:1.25}
+.diagnosis-body{font-size:15px;line-height:1.8;color:var(--sub)}
+
+/* COG TABLE */
+.cog-table{width:100%;border-collapse:collapse;font-size:14px;background:var(--white);border:1px solid var(--border);border-radius:3px;overflow:hidden;margin-bottom:12px}
+.cog-table th{font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);padding:11px 15px;border-bottom:1px solid var(--border);text-align:left;background:var(--cream)}
+.cog-table td{padding:11px 15px;border-bottom:1px solid var(--border);vertical-align:middle}
+.cog-table tr:last-child td{border-bottom:none}
+.cog-table tr.active-row{background:#fdf5f4}
+.dot-indicator{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px}
+
+/* STEPS */
+.steps-card{background:var(--black);color:var(--white);border-radius:3px;padding:26px;margin-bottom:12px}
+.steps-card h3{font-family:var(--serif);font-size:17px;font-weight:700;color:#999;margin-bottom:20px}
+.step-item{display:flex;gap:14px;margin-bottom:18px;align-items:flex-start}
+.step-item:last-child{margin-bottom:0}
+.step-num{font-family:var(--serif);font-size:22px;font-weight:900;color:var(--red);line-height:1;flex-shrink:0;width:26px}
+.step-title{font-size:15px;font-weight:600;margin-bottom:4px;color:var(--white)}
+.step-detail{font-size:13px;color:#888;line-height:1.7}
+
+/* CTA */
+.cta-card{border:2px solid var(--black);border-radius:3px;padding:36px;text-align:center;background:var(--cream);margin-top:28px}
+.cta-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--red);margin-bottom:10px}
+.cta-scarcity{display:inline-flex;align-items:center;gap:6px;background:var(--black);color:var(--white);padding:6px 14px;border-radius:2px;font-family:var(--mono);font-size:10px;letter-spacing:.06em;margin-bottom:18px}
+.cta-scarcity-dot{width:6px;height:6px;background:#c0392b;border-radius:50%;animation:pulse 2s infinite}
+.cta-card h3{font-family:var(--serif);font-size:24px;font-weight:900;color:var(--black);margin-bottom:10px;line-height:1.2}
+.cta-card p{font-size:15px;color:var(--sub);margin-bottom:22px;line-height:1.75;max-width:440px;margin-left:auto;margin-right:auto}
+.cta-attribution{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
+.cta-btn{display:inline-block;background:var(--red);color:white;font-family:var(--serif);font-size:17px;font-weight:700;padding:14px 30px;border-radius:3px;text-decoration:none;transition:background .15s}
+.cta-btn:hover{background:var(--red-dk)}
+.cta-note{margin-top:11px;font-size:12px;color:var(--muted)}
+
+
+/* GATE SCIENCE BADGE */
+.gate-science-badge{display:flex;align-items:flex-start;gap:9px;background:rgba(192,57,43,.06);border:1px solid rgba(192,57,43,.15);border-radius:3px;padding:10px 13px;margin-bottom:20px;font-size:12px;color:var(--sub);line-height:1.55}
+.gate-science-icon{flex-shrink:0;font-size:14px;margin-top:1px}
+
+/* CALC SCIENCE LINE */
+.calc-header-science{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--white);margin-top:18px;line-height:1.5;background:rgba(192,57,43,.2);border:1px solid rgba(192,57,43,.4);border-radius:3px;padding:8px 14px}
+
+/* GATE COACH INTRO */
+.gate-coach{display:flex;align-items:center;gap:14px;margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border)}
+.gate-coach-photo{width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid var(--border)}
+.gate-coach-name{font-family:var(--serif);font-size:16px;font-weight:700;color:var(--black)}
+.gate-coach-title{font-size:12px;color:var(--muted);line-height:1.5;margin-top:2px}
+
+/* SOCIAL COUNT */
+.gate-social-count{display:flex;align-items:flex-start;gap:12px;margin-bottom:4px}
+.gate-avatars{display:flex;flex-shrink:0;margin-top:3px}
+.gate-avatar{width:26px;height:26px;border-radius:50%;border:2px solid var(--white);margin-right:-7px;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;color:white;flex-shrink:0}
+.gate-social-text{font-size:13px;color:var(--sub);line-height:1.55;padding-left:10px}
+.gate-social-text strong{color:var(--black)}
+
+/* MINI CTA (inline after diagnosis) */
+.mini-cta{display:none;border:1px solid var(--border);border-radius:3px;padding:16px 20px;margin-bottom:14px;background:var(--cream);align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.mini-cta.visible{display:flex}
+.mini-cta-left{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.mini-cta-photo{width:40px;height:40px;border-radius:50%;object-fit:cover;border:1.5px solid var(--border)}
+.mini-cta-name{font-family:var(--serif);font-size:14px;font-weight:700;color:var(--black)}
+.mini-cta-role{font-size:11px;color:var(--muted)}
+.mini-cta-right{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.mini-cta-text{font-size:13px;color:var(--sub);line-height:1.5}
+.mini-cta-btn{white-space:nowrap;background:var(--black);color:var(--white);font-family:var(--sans);font-size:13px;font-weight:600;padding:9px 16px;border-radius:2px;text-decoration:none;transition:background .15s;flex-shrink:0}
+.mini-cta-btn:hover{background:#333}
+@media(max-width:600px){.mini-cta{flex-direction:column;align-items:flex-start}.mini-cta-right{flex-direction:column;align-items:flex-start}}
+
+/* CTA COACH ROW */
+.cta-coach-row{display:flex;align-items:center;gap:12px;justify-content:center;margin-bottom:20px}
+.cta-coach-photo{width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid var(--border);flex-shrink:0}
+.cta-coach-info{text-align:left}
+.cta-coach-name{font-family:var(--serif);font-size:16px;font-weight:700;color:var(--black)}
+.cta-coach-role{font-size:12px;color:var(--muted);margin-top:2px}
+
+/* ADMIN */
+.admin-toggle{display:none!important}
+.admin-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.85);display:none;align-items:flex-start;justify-content:center;padding:24px;overflow-y:auto}
+.admin-overlay.visible{display:flex}
+.admin-panel{background:#111;border:1px solid #2a2a2a;border-radius:4px;width:100%;max-width:980px;padding:32px;margin:auto}
+.admin-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;flex-wrap:wrap;gap:12px}
+.admin-title{font-family:var(--serif);font-size:22px;font-weight:900;color:#fff}
+.admin-meta{font-family:var(--mono);font-size:10px;color:#555;letter-spacing:.1em;margin-top:4px}
+.admin-close{background:#1a1a1a;border:1px solid #333;border-radius:3px;padding:7px 14px;font-family:var(--mono);font-size:10px;color:#666;cursor:pointer;letter-spacing:.1em;transition:all .12s}
+.admin-close:hover{background:#2a2a2a;color:#fff}
+.admin-csv-btn{background:rgba(192,57,43,.15);border:1px solid rgba(192,57,43,.3);border-radius:3px;padding:7px 14px;font-family:var(--mono);font-size:10px;color:#d88;cursor:pointer;letter-spacing:.1em;transition:all .12s}
+.admin-csv-btn:hover{background:rgba(192,57,43,.3)}
+.admin-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:22px}
+@media(max-width:600px){.admin-stats{grid-template-columns:1fr 1fr}}
+.admin-stat{background:#1a1a1a;border:1px solid #222;border-radius:3px;padding:14px}
+.admin-stat-label{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#444;margin-bottom:7px}
+.admin-stat-value{font-family:var(--serif);font-size:26px;font-weight:900;color:#fff}
+.admin-stat-sub{font-size:11px;color:#3a3a3a;margin-top:3px}
+.admin-table-wrap{overflow-x:auto}
+.admin-table{width:100%;border-collapse:collapse;font-size:12px;color:#777}
+.admin-table th{font-family:var(--mono);font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:#3a3a3a;padding:9px 11px;border-bottom:1px solid #1e1e1e;text-align:left;white-space:nowrap}
+.admin-table td{padding:9px 11px;border-bottom:1px solid #181818;vertical-align:middle}
+.admin-table tr:hover td{background:rgba(255,255,255,.02)}
+.admin-badge{display:inline-block;padding:2px 8px;border-radius:2px;font-size:10px;font-family:var(--mono)}
+.admin-badge.danger{background:rgba(192,57,43,.2);color:#e88}
+.admin-badge.warning{background:rgba(192,120,32,.2);color:#db8}
+.admin-badge.safe{background:rgba(39,174,96,.2);color:#8d8}
+.admin-empty{text-align:center;padding:48px 0;font-family:var(--mono);font-size:11px;color:#2a2a2a;letter-spacing:.1em}
+
+
+
+/* SOCIAL PROOF BANNER above diagnostic */
+.social-proof-banner{background:var(--cream);border-bottom:1px solid var(--border);padding:10px 24px}
+.social-proof-inner{max-width:var(--max);margin:0 auto;display:flex;align-items:center;gap:12px}
+.social-proof-text{font-size:13px;color:var(--sub);line-height:1.5}
+.social-proof-text strong{color:var(--black)}
+
+
+/* TRIED GRID — multi-select, matches trigger-item style */
+.tried-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.tried-item{display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--border);border-radius:3px;font-size:13px;color:var(--sub);cursor:pointer;transition:all .15s;user-select:none;line-height:1.3}
+.tried-item:hover{border-color:var(--black);color:var(--black)}
+.tried-item.active{border-color:var(--black);background:var(--black);color:var(--white)}
+.tried-item.active .trigger-dot{background:var(--white);border-color:var(--white)}
+.tried-item .trigger-dot{width:7px;height:7px;border-radius:50%;border:1.5px solid #ccc;flex-shrink:0;transition:all .15s}
+.tried-item:hover .trigger-dot{border-color:var(--black)}
+@media(max-width:480px){.tried-grid{grid-template-columns:1fr}}
+
+/* STICKY BAR */
+.sticky-bar{position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--black);border-top:1px solid #2a2a2a;padding:12px 24px;transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);pointer-events:none}
+.sticky-bar.visible{transform:translateY(0);pointer-events:all}
+.sticky-bar-inner{max-width:760px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.sticky-bar-left{display:flex;align-items:center;gap:10px}
+.sticky-bar-photo{width:36px;height:36px;border-radius:50%;object-fit:cover;border:1.5px solid #444;flex-shrink:0}
+.sticky-bar-name{display:block;font-family:var(--serif);font-size:14px;font-weight:700;color:var(--white)}
+.sticky-bar-tag{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:#666;text-transform:uppercase;margin-top:1px}
+.sticky-bar-btn{white-space:nowrap;background:var(--red);color:var(--white);font-family:var(--serif);font-size:15px;font-weight:700;padding:10px 20px;border-radius:3px;text-decoration:none;transition:background .15s;flex-shrink:0}
+.sticky-bar-btn:hover{background:var(--red-dk)}
+@media(max-width:500px){.sticky-bar-left div{display:none}.sticky-bar-btn{font-size:14px;padding:10px 16px}}
+
+@media(max-width:640px){
+  .topbar,.gate-topbar{padding:12px 20px}
+  .container{padding:32px 20px 80px}
+  .gate-form-wrap{padding:26px 20px}
+  .calc-header{padding:40px 20px 36px}
+  .progress-container{padding:8px 20px 18px}
+  .cta-card{padding:26px 20px}
+}
+
+/* Mobile tap */
+.toggle-btn,.stepper-btn,.trigger-item,.tried-item,.role-pill,.calc-btn,.gate-submit{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+</style>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '2727975300910211');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=2727975300910211&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+</head>
+<body>
+
+<!-- ADMIN TOGGLE (hidden — access via ?admin=rup2024) -->
+<button class="admin-toggle" id="admin-toggle" onclick="openAdmin()"></button>
+
+<!-- ═══════════════════════════════════════════════
+     GATE PAGE
+════════════════════════════════════════════════ -->
+<div class="gate-overlay" id="gate-overlay">
+
+  <div class="gate-topbar">
+    <a href="https://respondunderpressure.com" class="gate-topbar-brand">Respond <span>Under Pressure</span></a>
+    <span class="gate-topbar-tag">Free Diagnostic Tool</span>
+  </div>
+
+  <div class="gate-body">
+
+    <!-- LEFT: PITCH — desktop only layout -->
+    <div class="gate-pitch">
+
+      <!-- ARNAB INTRO — desktop shows here; mobile hides this block -->
+      <div class="gate-coach">
+        <img src="https://respondunderpressure.com/img/image01.jpg" alt="Arnab Sinha" class="gate-coach-photo">
+        <div class="gate-coach-info">
+          <div class="gate-coach-name">Arnab Sinha</div>
+          <div class="gate-coach-title">High-Pressure Leadership Coach<br>for Founders &amp; Senior Leaders</div>
+        </div>
+      </div>
+
+      <div class="gate-eyebrow">Free · Evidence-Based · Sleep Diagnostic</div>
+      <h1 class="gate-headline">Your sleep is costing you more than you think — <em>here's the exact number.</em></h1>
+      <p class="gate-subhead">Most high-performers know they're under-slept. What they don't know is the precise cognitive toll — and which of their decisions, conversations, and instincts are already compromised because of it.</p>
+
+      <div class="gate-science-badge">
+        <span class="gate-science-icon">🔬</span>
+        <span>Built on peer-reviewed sleep research — Harvard, Van Dongen Lab, and SAFTE model</span>
+      </div>
+
+      <ul class="gate-bullets">
+        <li>Discover the exact cognitive % you're leaving on the table every day — it's almost certainly not what you'd estimate</li>
+        <li>Find out which specific brain functions are degraded right now — and which ones are still intact</li>
+        <li>See the hidden multiplier that turns a "not that bad" sleep pattern into serious performance drag</li>
+        <li>Get a free recovery protocol built around your schedule — not generic sleep hygiene advice</li>
+      </ul>
+
+    </div>
+
+    <!-- RIGHT: FORM -->
+    <div class="gate-form-wrap">
+
+      <!-- ─── MOBILE-ONLY SECTION (hidden on desktop) ─── -->
+      <div class="gate-mobile-hook">
+
+        <!-- 1. Eyebrow -->
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:10px">Free · Evidence-Based · Sleep Diagnostic</div>
+
+        <!-- 2. Headline -->
+        <div style="font-family:var(--serif);font-size:24px;font-weight:900;line-height:1.12;color:var(--black);margin-bottom:16px">Your sleep is costing you more than you think — <em style="font-style:italic;color:var(--red)">here's the exact number.</em></div>
+
+        <!-- 3. Arnab photo + name inline under headline -->
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border)">
+          <img src="https://respondunderpressure.com/img/image01.jpg" alt="Arnab Sinha" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--border);flex-shrink:0;">
+          <div>
+            <div style="font-family:var(--serif);font-size:14px;font-weight:700;color:var(--black);line-height:1.2">Arnab Sinha</div>
+            <div style="font-size:11px;color:var(--muted);line-height:1.4;margin-top:2px">High-Pressure Leadership Coach · Founders &amp; Senior Leaders</div>
+          </div>
+        </div>
+
+        <!-- 4. Social proof strip -->
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border)">
+          <div style="display:flex;flex-shrink:0">
+            <div style="width:24px;height:24px;border-radius:50%;background:#c0392b;border:2px solid #fff;margin-right:-6px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff">F</div>
+            <div style="width:24px;height:24px;border-radius:50%;background:#2c3e50;border:2px solid #fff;margin-right:-6px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff">C</div>
+            <div style="width:24px;height:24px;border-radius:50%;background:#27ae60;border:2px solid #fff;margin-right:-6px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff">V</div>
+            <div style="width:24px;height:24px;border-radius:50%;background:#8e44ad;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff">L</div>
+          </div>
+          <div style="font-size:12px;color:var(--sub);line-height:1.45;padding-left:8px">Join <strong style="color:var(--black)">hundreds of founders and senior leaders</strong> who've run this diagnostic</div>
+        </div>
+
+        <!-- 5. Science badge -->
+        <div style="display:flex;align-items:flex-start;gap:8px;background:rgba(192,57,43,.06);border:1px solid rgba(192,57,43,.15);border-radius:3px;padding:8px 10px;margin-bottom:20px;font-size:11px;color:#8b2020;line-height:1.5">
+          <span style="font-size:13px;flex-shrink:0">🔬</span>
+          <span>Built on peer-reviewed sleep research — Harvard, Van Dongen Lab &amp; SAFTE model</span>
+        </div>
+
+      </div>
+      <!-- ─── END MOBILE-ONLY ─── -->
+
+      <!-- Social proof — always visible on desktop, hidden on mobile (shown in hook instead) -->
+      <div class="gate-desktop-proof">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--border)">
+          <div style="display:flex;flex-shrink:0">
+            <div style="width:26px;height:26px;border-radius:50%;background:#c0392b;border:2px solid var(--cream);margin-right:-7px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff">F</div>
+            <div style="width:26px;height:26px;border-radius:50%;background:#2c3e50;border:2px solid var(--cream);margin-right:-7px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff">C</div>
+            <div style="width:26px;height:26px;border-radius:50%;background:#27ae60;border:2px solid var(--cream);margin-right:-7px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff">V</div>
+            <div style="width:26px;height:26px;border-radius:50%;background:#8e44ad;border:2px solid var(--cream);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff">L</div>
+          </div>
+          <div style="font-size:12px;color:var(--sub);line-height:1.5;padding-left:8px">Join <strong style="color:var(--black)">hundreds of founders, CEOs and senior leaders</strong> who've used this diagnostic to understand — and close — their performance gap</div>
+        </div>
+      </div>
+
+      <div class="gate-form-title">Run your free sleep diagnostic</div>
+      <div class="gate-form-sub">100% free · Evidence-based · Takes 4 minutes · Results are private</div>
+
+      <div class="gate-form">
+
+        <div class="gate-field">
+          <label class="gate-label" for="gate-name">First name</label>
+          <input class="gate-input" id="gate-name" type="text" placeholder="Your first name" autocomplete="given-name">
+          <span class="gate-error" id="name-error">Please enter your first name</span>
+        </div>
+
+        <div class="gate-field">
+          <label class="gate-label" for="gate-phone">Phone</label>
+          <input class="gate-input" id="gate-phone" type="tel" placeholder="+1 555 000 0000" autocomplete="tel">
+          <span class="gate-error" id="phone-error">Please enter a valid phone number</span>
+        </div>
+
+        <div class="gate-field">
+          <label class="gate-label" for="gate-email">Email</label>
+          <input class="gate-input" id="gate-email" type="email" placeholder="you@company.com" autocomplete="email">
+          <span class="gate-error" id="email-error">Please enter a valid email address</span>
+        </div>
+
+        <div class="gate-field">
+          <label class="gate-label">I am a <span class="optional">— pick the closest fit</span></label>
+          <div class="role-pills">
+            <button type="button" class="role-pill" onclick="selectRole(this)">Founder / CEO</button>
+            <button type="button" class="role-pill" onclick="selectRole(this)">C-Suite / CXO</button>
+            <button type="button" class="role-pill" onclick="selectRole(this)">VP / Director</button>
+            <button type="button" class="role-pill" onclick="selectRole(this)">Senior Manager</button>
+            <button type="button" class="role-pill" onclick="selectRole(this)">Investor</button>
+            <button type="button" class="role-pill" onclick="selectRole(this)">High Performer</button>
+          </div>
+          <span class="gate-error" id="role-error">Please select your role to continue</span>
+        </div>
+
+        <button class="gate-submit" onclick="submitGate()">Show Me My Number →</button>
+        <p class="gate-privacy">🔒 Free. No credit card. No pitch. Your data is private and used only to personalise your results.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     APP BODY
+════════════════════════════════════════════════ -->
+<div class="app-body" id="app-body">
+
+  <!-- greeting -->
+  <div class="greeting-strip" id="greeting-strip">
+    👋 <strong id="greeting-name">—</strong> · <span id="greeting-role">—</span>
+  </div>
+
+
+  <!-- CALC HEADER -->
+  <div class="calc-header">
+    <div class="calc-header-brand">Respond <span>Under Pressure</span> · Sleep Diagnostic</div>
+    <h1>How much is sleep debt <em>really</em> costing your performance under pressure?</h1>
+    <p class="calc-header-sub">Answer honestly. The accuracy of your results depends on it.</p>
+    <p class="calc-header-science">🔬 Built on peer-reviewed research — Harvard Medical School, Van Dongen Lab (Penn State), and the SAFTE cognitive fatigue model</p>
+  </div>
+
+  <!-- PROGRESS BAR -->
+  <div class="progress-container">
+    <div style="max-width:var(--max);margin:0 auto">
+      <div class="progress-row" id="progress-row">
+        <div class="prog-step">
+          <div class="prog-dot active" id="prog-1">1</div>
+          <div class="prog-label active" id="progl-1">Sleep Hours</div>
+        </div>
+        <div style="flex:1;height:2px;background:#2a2a2a;margin-top:10px"></div>
+        <div class="prog-step">
+          <div class="prog-dot" id="prog-2">2</div>
+          <div class="prog-label" id="progl-2">Consistency</div>
+        </div>
+        <div style="flex:1;height:2px;background:#2a2a2a;margin-top:10px"></div>
+        <div class="prog-step">
+          <div class="prog-dot" id="prog-3">3</div>
+          <div class="prog-label" id="progl-3">Duration</div>
+        </div>
+        <div style="flex:1;height:2px;background:#2a2a2a;margin-top:10px"></div>
+        <div class="prog-step">
+          <div class="prog-dot" id="prog-4">4</div>
+          <div class="prog-label" id="progl-4">Triggers</div>
+        </div>
+        <div style="flex:1;height:2px;background:#2a2a2a;margin-top:10px"></div>
+        <div class="prog-step">
+          <div class="prog-dot" id="prog-5">5</div>
+          <div class="prog-label" id="progl-5">Context</div>
+        </div>
+        <div style="flex:1;height:2px;background:#2a2a2a;margin-top:10px"></div>
+        <div class="prog-step">
+          <div class="prog-dot" id="prog-6">6</div>
+          <div class="prog-label" id="progl-6">Results</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- ── SECTION 1: SLEEP HOURS ── -->
+    <div class="section-label" id="section-1">01 — Sleep Hours</div>
+
+    <div class="card">
+      <div class="card-title">How much are you actually sleeping?</div>
+      <div class="card-desc">Be honest — not what you aim for, what you actually get. Tap + or − to set your hours.</div>
+
+      <!-- hidden inputs keep values for calculation -->
+      <input type="hidden" id="weeknight" value="6">
+      <input type="hidden" id="weekend" value="7">
+      <input type="hidden" id="target" value="8">
+
+      <div style="display:flex;flex-direction:column;">
+
+        <div style="display:flex;flex-direction:row;align-items:center;justify-content:space-between;padding:16px 0;gap:12px;">
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:15px;font-weight:600;color:#1a1a1a;line-height:1.3;">Sleep on weekdays</div>
+            <div style="font-size:12px;color:#888480;margin-top:3px;">Mon – Fri</div>
+          </div>
+          <div style="display:flex;flex-direction:row;align-items:center;flex-shrink:0;border:1.5px solid #ddd8d0;border-radius:3px;overflow:hidden;">
+            <button onclick="stepVal('weeknight',-0.5,3,10)" style="width:52px;height:56px;border:none;background:#f8f5f0;cursor:pointer;font-size:26px;font-weight:300;color:#111;display:flex;align-items:center;justify-content:center;touch-action:manipulation;-webkit-tap-highlight-color:transparent;flex-shrink:0;">−</button>
+            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:72px;height:56px;border-left:1.5px solid #ddd8d0;border-right:1.5px solid #ddd8d0;padding:0 8px;flex-shrink:0;">
+              <span id="weeknight-num" style="font-family:'Playfair Display',Georgia,serif;font-size:26px;font-weight:900;color:#111;line-height:1;transition:color .15s;">6.0</span>
+              <span style="font-size:10px;color:#888480;font-family:'DM Mono',monospace;letter-spacing:.06em;margin-top:2px;">hrs</span>
+            </div>
+            <button onclick="stepVal('weeknight',0.5,3,10)" style="width:52px;height:56px;border:none;background:#f8f5f0;cursor:pointer;font-size:26px;font-weight:300;color:#111;display:flex;align-items:center;justify-content:center;touch-action:manipulation;-webkit-tap-highlight-color:transparent;flex-shrink:0;">+</button>
+          </div>
+        </div>
+
+        <div style="height:1px;background:#ddd8d0;"></div>
+
+        <div style="display:flex;flex-direction:row;align-items:center;justify-content:space-between;padding:16px 0;gap:12px;">
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:15px;font-weight:600;color:#1a1a1a;line-height:1.3;">Sleep on weekends</div>
+            <div style="font-size:12px;color:#888480;margin-top:3px;">Sat – Sun</div>
+          </div>
+          <div style="display:flex;flex-direction:row;align-items:center;flex-shrink:0;border:1.5px solid #ddd8d0;border-radius:3px;overflow:hidden;">
+            <button onclick="stepVal('weekend',-0.5,3,12)" style="width:52px;height:56px;border:none;background:#f8f5f0;cursor:pointer;font-size:26px;font-weight:300;color:#111;display:flex;align-items:center;justify-content:center;touch-action:manipulation;-webkit-tap-highlight-color:transparent;flex-shrink:0;">−</button>
+            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:72px;height:56px;border-left:1.5px solid #ddd8d0;border-right:1.5px solid #ddd8d0;padding:0 8px;flex-shrink:0;">
+              <span id="weekend-num" style="font-family:'Playfair Display',Georgia,serif;font-size:26px;font-weight:900;color:#111;line-height:1;transition:color .15s;">7.0</span>
+              <span style="font-size:10px;color:#888480;font-family:'DM Mono',monospace;letter-spacing:.06em;margin-top:2px;">hrs</span>
+            </div>
+            <button onclick="stepVal('weekend',0.5,3,12)" style="width:52px;height:56px;border:none;background:#f8f5f0;cursor:pointer;font-size:26px;font-weight:300;color:#111;display:flex;align-items:center;justify-content:center;touch-action:manipulation;-webkit-tap-highlight-color:transparent;flex-shrink:0;">+</button>
+          </div>
+        </div>
+
+        <div style="height:1px;background:#ddd8d0;"></div>
+
+        <div style="display:flex;flex-direction:row;align-items:center;justify-content:space-between;padding:16px 0;gap:12px;">
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:15px;font-weight:600;color:#1a1a1a;line-height:1.3;">Your sleep need</div>
+            <div style="font-size:12px;color:#888480;margin-top:3px;">When fully rested, you naturally sleep</div>
+          </div>
+          <div style="display:flex;flex-direction:row;align-items:center;flex-shrink:0;border:1.5px solid #ddd8d0;border-radius:3px;overflow:hidden;">
+            <button onclick="stepVal('target',-0.5,6,10)" style="width:52px;height:56px;border:none;background:#f8f5f0;cursor:pointer;font-size:26px;font-weight:300;color:#111;display:flex;align-items:center;justify-content:center;touch-action:manipulation;-webkit-tap-highlight-color:transparent;flex-shrink:0;">−</button>
+            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:72px;height:56px;border-left:1.5px solid #ddd8d0;border-right:1.5px solid #ddd8d0;padding:0 8px;flex-shrink:0;">
+              <span id="target-num" style="font-family:'Playfair Display',Georgia,serif;font-size:26px;font-weight:900;color:#111;line-height:1;transition:color .15s;">8.0</span>
+              <span style="font-size:10px;color:#888480;font-family:'DM Mono',monospace;letter-spacing:.06em;margin-top:2px;">hrs</span>
+            </div>
+            <button onclick="stepVal('target',0.5,6,10)" style="width:52px;height:56px;border:none;background:#f8f5f0;cursor:pointer;font-size:26px;font-weight:300;color:#111;display:flex;align-items:center;justify-content:center;touch-action:manipulation;-webkit-tap-highlight-color:transparent;flex-shrink:0;">+</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ── SECTION 2: CONSISTENCY ── -->
+    <div class="section-label" id="section-2">02 — Sleep Consistency</div>
+
+    <div class="card">
+      <div class="card-title">How consistent are your sleep and wake times?</div>
+      <div class="card-desc">Irregular sleep timing causes independent cognitive damage — even when total hours look adequate.</div>
+      <div class="toggle-group" id="consistency-group">
+        <button class="toggle-btn active" data-val="4" onclick="selectToggle(this,'consistency-group'); updateProgress(2)">Very consistent</button>
+        <button class="toggle-btn" data-val="2" onclick="selectToggle(this,'consistency-group'); updateProgress(2)">Mostly consistent</button>
+        <button class="toggle-btn" data-val="0" onclick="selectToggle(this,'consistency-group'); updateProgress(2)">Variable</button>
+        <button class="toggle-btn" data-val="-2" onclick="selectToggle(this,'consistency-group'); updateProgress(2)">Chaotic</button>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ── SECTION 3: DURATION ── -->
+    <div class="section-label" id="section-3">03 — Sleep Pattern Duration</div>
+
+
+    <div class="card" style="margin-top:0">
+      <div class="card-title">How long has this sleep pattern persisted?</div>
+      <div class="card-desc">Chronic sleep debt compounds — and impairs your ability to perceive how impaired you are.</div>
+      <div class="toggle-group" id="duration-group">
+        <button class="toggle-btn active" data-val="1.0" onclick="selectToggle(this,'duration-group'); updateProgress(3)">Just this week</button>
+        <button class="toggle-btn" data-val="1.2" onclick="selectToggle(this,'duration-group'); updateProgress(3)">A few weeks</button>
+        <button class="toggle-btn" data-val="1.5" onclick="selectToggle(this,'duration-group'); updateProgress(3)">Months</button>
+        <button class="toggle-btn" data-val="2.0" onclick="selectToggle(this,'duration-group'); updateProgress(3)">Years</button>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ── SECTION 4: TRIGGERS ── -->
+    <div class="section-label" id="section-4">04 — Sleep Quality Triggers</div>
+
+    <div class="card">
+      <div class="card-title">What's actively degrading your sleep quality?</div>
+      <div class="card-desc">Select everything that applies this week. Frequency matters — tap again to set how often.</div>
+
+      <div class="triggers-grid">
+        <!-- Simple triggers -->
+        <div class="trigger-wrap">
+          <div class="trigger-item" onclick="toggleTrigger(this); updateProgress(4)">
+            <div class="trigger-dot"></div>Travel / time zones
+          </div>
+        </div>
+        <div class="trigger-wrap">
+          <div class="trigger-item" onclick="toggleTrigger(this); updateProgress(4)">
+            <div class="trigger-dot"></div>Caffeine after 2pm
+          </div>
+        </div>
+        <div class="trigger-wrap">
+          <div class="trigger-item" onclick="toggleTrigger(this); updateProgress(4)">
+            <div class="trigger-dot"></div>High stress / anxiety
+          </div>
+        </div>
+        <div class="trigger-wrap">
+          <div class="trigger-item" onclick="toggleTrigger(this); updateProgress(4)">
+            <div class="trigger-dot"></div>Poor sleep environment
+          </div>
+        </div>
+        <div class="trigger-wrap">
+          <div class="trigger-item" onclick="toggleTrigger(this); updateProgress(4)">
+            <div class="trigger-dot"></div>Forced early wake
+          </div>
+        </div>
+
+        <!-- Frequency triggers -->
+        <div class="trigger-wrap">
+          <div class="trigger-item" onclick="toggleTriggerFreq(this,'latework-freq'); updateProgress(4)">
+            <div class="trigger-dot"></div>Late work after 10pm
+          </div>
+          <div class="freq-selector" id="latework-freq">
+            <button class="freq-btn active" data-penalty="0.3" onclick="selectFreq(event,this)">1–2×<br>this week</button>
+            <button class="freq-btn" data-penalty="0.6" onclick="selectFreq(event,this)">3–4×<br>this week</button>
+            <button class="freq-btn" data-penalty="1.0" onclick="selectFreq(event,this)">Every<br>night</button>
+          </div>
+        </div>
+        <div class="trigger-wrap">
+          <div class="trigger-item" onclick="toggleTriggerFreq(this,'alcohol-freq'); updateProgress(4)">
+            <div class="trigger-dot"></div>Alcohol (2+ drinks)
+          </div>
+          <div class="freq-selector" id="alcohol-freq">
+            <button class="freq-btn active" data-penalty="0.3" onclick="selectFreq(event,this)">1–2×<br>this week</button>
+            <button class="freq-btn" data-penalty="0.6" onclick="selectFreq(event,this)">3–4×<br>this week</button>
+            <button class="freq-btn" data-penalty="1.0" onclick="selectFreq(event,this)">Every<br>night</button>
+          </div>
+        </div>
+        <div class="trigger-wrap">
+          <div class="trigger-item" onclick="toggleTriggerFreq(this,'screens-freq'); updateProgress(4)">
+            <div class="trigger-dot"></div>Screens in bed
+          </div>
+          <div class="freq-selector" id="screens-freq">
+            <button class="freq-btn active" data-penalty="0.3" onclick="selectFreq(event,this)">1–2×<br>this week</button>
+            <button class="freq-btn" data-penalty="0.6" onclick="selectFreq(event,this)">3–4×<br>this week</button>
+            <button class="freq-btn" data-penalty="1.0" onclick="selectFreq(event,this)">Every<br>night</button>
+          </div>
+        </div>
+        <div class="trigger-wrap">
+          <div class="trigger-item" onclick="toggleTriggerFreq(this,'eat-freq'); updateProgress(4)">
+            <div class="trigger-dot"></div>Late eating before bed
+          </div>
+          <div class="eat-selector" id="eat-freq">
+            <button class="freq-btn active" data-penalty="0.2" onclick="selectFreq(event,this)">Within<br>3 hours</button>
+            <button class="freq-btn" data-penalty="0.45" onclick="selectFreq(event,this)">Within<br>2 hours</button>
+            <button class="freq-btn" data-penalty="0.7" onclick="selectFreq(event,this)">Within<br>1 hour</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ── SECTION 5: CONTEXT ── -->
+    <div class="section-label" id="section-5">05 — Context</div>
+
+    <div class="card">
+      <div class="card-title">What have you already tried for your sleep?</div>
+      <div class="card-desc">Select everything you've used. This shapes which interventions are still available to you.</div>
+      <div class="tried-grid" id="tried-grid">
+        <div class="tried-item" data-bant="none" onclick="toggleTried(this); updateProgress(5)"><div class="trigger-dot"></div>Nothing yet — just pushed through</div>
+        <div class="tried-item" data-bant="melatonin" onclick="toggleTried(this); updateProgress(5)"><div class="trigger-dot"></div>Melatonin</div>
+        <div class="tried-item" data-bant="magnesium" onclick="toggleTried(this); updateProgress(5)"><div class="trigger-dot"></div>Magnesium</div>
+        <div class="tried-item" data-bant="otc_meds" onclick="toggleTried(this); updateProgress(5)"><div class="trigger-dot"></div>OTC sleep meds</div>
+        <div class="tried-item" data-bant="cbd" onclick="toggleTried(this); updateProgress(5)"><div class="trigger-dot"></div>CBD / adaptogens</div>
+        <div class="tried-item" data-bant="apps" onclick="toggleTried(this); updateProgress(5)"><div class="trigger-dot"></div>Sleep tracking apps</div>
+        <div class="tried-item" data-bant="routines" onclick="toggleTried(this); updateProgress(5)"><div class="trigger-dot"></div>Sleep hygiene routines</div>
+        <div class="tried-item" data-bant="coaching" onclick="toggleTried(this); updateProgress(5)"><div class="trigger-dot"></div>Coaching or specialist</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:0">
+      <div class="card-title">Where is the performance gap showing up most?</div>
+      <div class="card-desc">Knowing where it hurts most shapes the recovery priority order.</div>
+      <div class="toggle-group" id="impact-group">
+        <button class="toggle-btn active" data-bant="decisions" onclick="selectToggle(this,'impact-group'); updateProgress(5)">Decision quality and strategic thinking</button>
+        <button class="toggle-btn" data-bant="energy" onclick="selectToggle(this,'impact-group'); updateProgress(5)">Energy and sustained focus across the day</button>
+        <button class="toggle-btn" data-bant="emotional" onclick="selectToggle(this,'impact-group'); updateProgress(5)">Emotional steadiness and handling pressure</button>
+        <button class="toggle-btn" data-bant="all" onclick="selectToggle(this,'impact-group'); updateProgress(5)">All of the above, honestly</button>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <button class="calc-btn" onclick="calculate()">Calculate My Sleep Debt →</button>
+
+    <!-- ── RESULTS ── -->
+    <div class="results-section" id="results" style="margin-top:40px">
+
+      <div class="results-header">
+        <div class="results-title">Your Results</div>
+        <button class="recalc-btn" onclick="resetResults()">↺ Recalculate</button>
+      </div>
+
+      <div class="score-grid">
+        <div class="score-card" id="debt-card">
+          <div class="score-card-label">Weekly Sleep Debt</div>
+          <div class="score-card-value" id="debt-hours">—</div>
+          <div class="score-card-unit">hours this week</div>
+        </div>
+        <div class="score-card" id="impair-card">
+          <div class="score-card-label">Cognitive Impairment</div>
+          <div class="score-card-value" id="impair-pct">—</div>
+          <div class="score-card-unit">below rested baseline</div>
+        </div>
+        <div class="score-card" id="recovery-card">
+          <div class="score-card-label">Recovery Time</div>
+          <div class="score-card-value" id="recovery-days">—</div>
+          <div class="score-card-unit">days to full recovery</div>
+        </div>
+      </div>
+
+      <div class="impairment-wrap">
+        <div class="impairment-label">Cognitive Performance Index</div>
+        <div class="impairment-title">You are currently operating at <strong id="cpi-pct">—</strong>% of your rested capacity</div>
+        <div class="bar-track"><div class="bar-fill" id="cpi-bar" style="width:0%"></div></div>
+        <div class="bar-labels"><span>0%</span><span>Peak Capacity →</span><span>100%</span></div>
+      </div>
+
+      <div class="diagnosis-card" id="diagnosis-card">
+        <div class="diagnosis-eyebrow">Diagnosis</div>
+        <div class="diagnosis-headline" id="diagnosis-headline">—</div>
+        <div class="diagnosis-body" id="diagnosis-body">—</div>
+      </div>
+
+      <!-- INLINE MINI-CTA after diagnosis -->
+      <div class="mini-cta" id="mini-cta">
+        <div class="mini-cta-left">
+          <img src="https://respondunderpressure.com/img/image01.jpg" alt="Arnab Sinha" class="mini-cta-photo">
+          <div>
+            <div class="mini-cta-name">Arnab Sinha</div>
+            <div class="mini-cta-role">High-Pressure Leadership Coach</div>
+          </div>
+        </div>
+        <div class="mini-cta-right">
+          <span class="mini-cta-text">Want help fixing this specifically for your schedule and role?</span>
+          <a href="/apply/" class="mini-cta-btn">Apply for free 14-day coaching →</a>
+        </div>
+      </div>
+
+      <table class="cog-table">
+        <thead>
+          <tr>
+            <th>Cognitive Function</th>
+            <th>Status</th>
+            <th>Impact at This Impairment Level</th>
+          </tr>
+        </thead>
+        <tbody id="cog-tbody"></tbody>
+      </table>
+
+      <div class="steps-card">
+        <h3>Your Recovery Protocol</h3>
+        <div id="steps-content"></div>
+      </div>
+
+      <!-- CTA -->
+      <div class="cta-card">
+        <div class="cta-eyebrow">Next Step</div>
+        <div class="cta-scarcity">
+          <span class="cta-scarcity-dot"></span>
+          5 spots per month for sleep &amp; performance coaching · <span id="cta-spots-left">currently open</span>
+        </div>
+        <h3>Apply for 14-Day Free Sleep &amp; Performance Coaching</h3>
+        <div class="cta-coach-row">
+          <img src="https://respondunderpressure.com/img/image01.jpg" alt="Arnab Sinha" class="cta-coach-photo">
+          <div class="cta-coach-info">
+            <div class="cta-coach-name">Arnab Sinha</div>
+            <div class="cta-coach-role">High-Pressure Leadership Coach for Founders &amp; Senior Leaders</div>
+          </div>
+        </div>
+        <p>Your diagnostic shows a specific, fixable problem. In 14 days of 1:1 work, we build a sleep and recovery protocol around your exact schedule, role, and pressure patterns — not generic advice.<br><br>I take 5 people per month. That is genuinely all I can work with properly. If we are not a fit, I will tell you in the first call.</p>
+        <a href="/apply/" class="cta-btn">Apply for Free Coaching →</a>
+        <p class="cta-note">No pitch. No programme to sell. Just 14 days of focused 1:1 work on your sleep and performance.</p>
+      </div>
+
+    </div><!-- /results -->
+
+  </div><!-- /container -->
+
+  <!-- STICKY CTA BAR -->
+  <div class="sticky-bar" id="sticky-bar">
+    <div class="sticky-bar-inner">
+      <div class="sticky-bar-left">
+        <img src="https://respondunderpressure.com/img/image01.jpg" alt="Arnab Sinha" class="sticky-bar-photo">
+        <div>
+          <span class="sticky-bar-name">Arnab Sinha</span>
+          <span class="sticky-bar-tag">5 coaching spots open this month</span>
+        </div>
+      </div>
+      <a href="/apply/" class="sticky-bar-btn">Apply for Free Coaching →</a>
+    </div>
+  </div>
+
+</div><!-- /app-body -->
+
+<!-- ADMIN OVERLAY -->
+<div class="admin-overlay" id="admin-overlay">
+  <div class="admin-panel">
+    <div class="admin-header">
+      <div>
+        <div class="admin-title">Submissions Dashboard</div>
+        <div class="admin-meta" id="admin-meta">—</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <button class="admin-csv-btn" onclick="exportCSV()">↓ Export CSV</button>
+        <button class="admin-close" onclick="closeAdmin()">✕ Close</button>
+      </div>
+    </div>
+    <div class="admin-stats">
+      <div class="admin-stat">
+        <div class="admin-stat-label">Total Leads</div>
+        <div class="admin-stat-value" id="stat-total">0</div>
+        <div class="admin-stat-sub">submissions</div>
+      </div>
+      <div class="admin-stat">
+        <div class="admin-stat-label">Avg Sleep Debt</div>
+        <div class="admin-stat-value" id="stat-debt">—</div>
+        <div class="admin-stat-sub">hours / week</div>
+      </div>
+      <div class="admin-stat">
+        <div class="admin-stat-label">Avg Impairment</div>
+        <div class="admin-stat-value" id="stat-impair">—</div>
+        <div class="admin-stat-sub">% cognitive loss</div>
+      </div>
+      <div class="admin-stat">
+        <div class="admin-stat-label">Critical Cases</div>
+        <div class="admin-stat-value" id="stat-critical">0</div>
+        <div class="admin-stat-sub">impairment ≥ 25%</div>
+      </div>
+    </div>
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Timestamp</th><th>Name</th><th>Email</th><th>Phone</th><th>Role</th>
+            <th>Sleep Debt</th><th>Impairment</th><th>Recovery</th><th>Pattern</th>
+          </tr>
+        </thead>
+        <tbody id="admin-tbody">
+          <tr><td colspan="9"><div class="admin-empty">Loading...</div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── CONFIGURATION (must be first) ───────────────
+  const WEBHOOK_URL  = 'https://script.google.com/macros/s/AKfycbwx6Zh9dmhZL06cYklggeDwDfr4RznfS-mmefJknIb87qeURUg4fJzH8ANTunWENRDl4A/exec';
+  const ADMIN_SECRET = 'rup2024';
+  let gateUser = { name:'', email:'', phone:'', role:'' };
+  let selectedRole = '';
+
+  // ── UTM CAPTURE — read on page load, persist in sessionStorage ──────────
+  const UTM_KEYS = ['utm_source','utm_campaign'];
+  (function captureUtm() {
+    const params = new URLSearchParams(window.location.search);
+    UTM_KEYS.forEach(k => {
+      const v = params.get(k);
+      if (v) sessionStorage.setItem(k, v);
+    });
+  })();
+  function getUtms() {
+    const obj = {};
+    UTM_KEYS.forEach(k => { const v = sessionStorage.getItem(k); if (v) obj[k] = v; });
+    return obj;
+  }
+
+  // ── DOM READY ────────────────────────────────────
+  window.addEventListener('DOMContentLoaded', () => {
+    // Admin secret URL
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('admin') === ADMIN_SECRET) {
+      document.getElementById('gate-overlay').classList.add('hidden');
+      document.getElementById('app-body').classList.add('visible');
+      openAdmin();
+    }
+
+    // Enter key on gate inputs
+    ['gate-name','gate-phone','gate-email'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('keydown', e => { if (e.key === 'Enter') submitGate(); });
+    });
+  });
+
+  // ── STEPPER UPDATES ─────────────────────────────
+  function stepVal(id, delta, min, max) {
+    const el = document.getElementById(id);
+    let v = parseFloat(el.value) + delta;
+    v = Math.max(min, Math.min(max, Math.round(v * 2) / 2));
+    el.value = v;
+    document.getElementById(id+'-num').textContent = v.toFixed(1);
+    updateProgress(1);
+    // Visual feedback: briefly highlight the number
+    const numEl = document.getElementById(id+'-num');
+    numEl.style.color = 'var(--red)';
+    setTimeout(() => { numEl.style.color = ''; }, 200);
+  }
+  // Keep updateSlider as no-op for compatibility
+  function updateSlider(id, valId) {}
+
+  // ── PROGRESS BAR ─────────────────────────────────
+  const sectionInteracted = {1:false,2:false,3:false,4:false,5:false};
+  function updateProgress(section) {
+    sectionInteracted[section] = true;
+    for (let i = 1; i <= 5; i++) {
+      const dot = document.getElementById('prog-'+i);
+      const lbl = document.getElementById('progl-'+i);
+      if (sectionInteracted[i]) {
+        dot.className = 'prog-dot done'; dot.textContent = '✓';
+        lbl.className = 'prog-label done';
+      }
+    }
+    for (let i = section+1; i <= 5; i++) {
+      if (!sectionInteracted[i]) {
+        const dot = document.getElementById('prog-'+i);
+        const lbl = document.getElementById('progl-'+i);
+        if (!dot.classList.contains('done')) {
+          dot.className = 'prog-dot active'; lbl.className = 'prog-label active';
+        }
+        break;
+      }
+    }
+  }
+  function setResultsProgress() {
+    for (let i = 1; i <= 5; i++) {
+      document.getElementById('prog-'+i).className = 'prog-dot done';
+      document.getElementById('prog-'+i).textContent = '✓';
+      document.getElementById('progl-'+i).className = 'prog-label done';
+    }
+    document.getElementById('prog-6').className = 'prog-dot active';
+    document.getElementById('progl-6').className = 'prog-label active';
+  }
+
+  // ── GATE: ROLE PICKER ────────────────────────────
+  function selectRole(btn) {
+    document.querySelectorAll('.role-pill').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedRole = btn.textContent.trim();
+    document.getElementById('role-error').classList.remove('visible');
+  }
+
+  // ── GATE: SUBMIT ─────────────────────────────────
+  function submitGate() {
+    const nameEl  = document.getElementById('gate-name');
+    const emailEl = document.getElementById('gate-email');
+    const phoneEl = document.getElementById('gate-phone');
+    let valid = true;
+
+    const nameVal = nameEl.value.trim();
+    const nameErr = document.getElementById('name-error');
+    if (!nameVal || nameVal.length < 2 || !/^[a-zA-ZÀ-ÿ\s'\-]+$/.test(nameVal)) {
+      nameEl.classList.add('error');
+      nameErr.textContent = nameVal ? 'Please enter a real name (letters only)' : 'Please enter your first name';
+      nameErr.classList.add('visible'); valid = false;
+    } else { nameEl.classList.remove('error'); nameErr.classList.remove('visible'); }
+
+    const emailVal = emailEl.value.trim().toLowerCase();
+    const emailErr = document.getElementById('email-error');
+    const fakeEmails = ['test@','fake@','noemail','asdf','qwerty','aaaa@','1234@','temp@'];
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(emailVal) && !fakeEmails.some(f => emailVal.startsWith(f));
+    if (!emailOk) {
+      emailEl.classList.add('error'); emailErr.textContent = 'Please enter a valid email address';
+      emailErr.classList.add('visible'); valid = false;
+    } else { emailEl.classList.remove('error'); emailErr.classList.remove('visible'); }
+
+    const phoneVal = phoneEl.value.trim();
+    const phoneErr = document.getElementById('phone-error');
+    const phoneDigits = phoneVal.replace(/\D/g,'');
+    if (!phoneVal || phoneDigits.length < 7 || phoneDigits.length > 15) {
+      phoneEl.classList.add('error');
+      phoneErr.textContent = phoneVal ? 'Please enter a valid phone number' : 'Please enter your phone number';
+      phoneErr.classList.add('visible'); valid = false;
+    } else { phoneEl.classList.remove('error'); phoneErr.classList.remove('visible'); }
+
+    const roleErr = document.getElementById('role-error');
+    if (!selectedRole) { roleErr.classList.add('visible'); valid = false; }
+    else { roleErr.classList.remove('visible'); }
+
+    if (!valid) return;
+
+    gateUser = { name: nameVal, email: emailVal, phone: phoneVal || '—', role: selectedRole };
+    // Persist for apply page (different page load)
+    sessionStorage.setItem('rup_user', JSON.stringify(gateUser));
+    preselectRole(selectedRole);
+    const firstName = gateUser.name.split(' ')[0];
+    document.getElementById('greeting-name').textContent = firstName;
+    document.getElementById('greeting-role').textContent = selectedRole;
+    document.getElementById('greeting-strip').classList.add('visible');
+    document.getElementById('gate-overlay').classList.add('hidden');
+    document.getElementById('app-body').classList.add('visible');
+    window.scrollTo(0,0);
+    // Option B: update URL to /quiz for clean funnel tracking in Facebook
+    if(window.history && window.history.pushState) {
+      window.history.pushState({page:'quiz'}, '', '/quiz/');
+    }
+    if(window.fbq) fbq('track', 'Lead', {content_name: 'Sleep Diagnostic', role: selectedRole});
+    // CAPI server-side mirror
+    sendCapi('Lead', { content_name: 'Sleep Diagnostic' });
+    // MailerLite — add to sleep-funnel-lead group
+    sendMailerLite('lead');
+  }
+
+  function preselectRole(role) {
+    const roleMap = {
+      'Founder / CEO':'Founder / CEO','C-Suite / CXO':'C-Suite / VP',
+      'VP / Director':'C-Suite / VP','Senior Manager':'Senior Manager',
+      'Investor':'Founder / CEO','High Performer':'Individual Contributor'
+    };
+    const mapped = roleMap[role] || 'Founder / CEO';
+    document.querySelectorAll('#role-group .toggle-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.textContent.trim() === mapped);
+    });
+  }
+
+  // ── TOGGLES ──────────────────────────────────────
+  function selectToggle(btn, groupId) {
+    document.querySelectorAll('#'+groupId+' .toggle-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  function toggleTried(el) {
+    const noneItem = document.querySelector('#tried-grid [data-bant="none"]');
+    if (el.dataset.bant === 'none') {
+      // selecting "nothing" deselects everything else
+      document.querySelectorAll('.tried-item').forEach(i => i.classList.remove('active'));
+      el.classList.add('active');
+    } else {
+      // selecting anything else deselects "nothing"
+      if (noneItem) noneItem.classList.remove('active');
+      el.classList.toggle('active');
+    }
+    // update dot colour
+    document.querySelectorAll('.tried-item').forEach(i => {
+      i.querySelector('.trigger-dot').style.background = i.classList.contains('active') ? '#fff' : '';
+    });
+  }
+
+  function toggleTrigger(el) {
+    el.classList.toggle('active');
+    el.querySelector('.trigger-dot').textContent = el.classList.contains('active') ? '✓' : '';
+  }
+  function toggleTriggerFreq(el, freqId) {
+    el.classList.toggle('active');
+    el.querySelector('.trigger-dot').textContent = el.classList.contains('active') ? '✓' : '';
+    const freqEl = document.getElementById(freqId);
+    if (freqEl) freqEl.classList.toggle('visible', el.classList.contains('active'));
+  }
+  function selectFreq(e, btn) {
+    e.stopPropagation();
+    const parent = btn.closest('.freq-selector,.eat-selector');
+    parent.querySelectorAll('.freq-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  function getTriggerPenalty(freqId) {
+    const freqEl = document.getElementById(freqId);
+    if (!freqEl || !freqEl.classList.contains('visible')) return 0;
+    const activeBtn = freqEl.querySelector('.freq-btn.active');
+    return activeBtn ? parseFloat(activeBtn.dataset.penalty) : 0.3;
+  }
+  function resetResults() {
+    document.getElementById('results').classList.remove('visible');
+    document.getElementById('mini-cta').classList.remove('visible');
+    document.getElementById('sticky-bar').classList.remove('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── CORE CALCULATION ─────────────────────────────
+  function calculate() {
+    const weeknight = parseFloat(document.getElementById('weeknight').value);
+    const weekend   = parseFloat(document.getElementById('weekend').value);
+    const target    = parseFloat(document.getElementById('target').value);
+
+    const consistencyActive   = document.querySelector('#consistency-group .toggle-btn.active');
+    const consistencyVal      = consistencyActive ? parseFloat(consistencyActive.dataset.val) : 2;
+    const qualityLossPerNight = ({'4':0,'2':0.2,'0':0.5,'-2':0.8})[String(consistencyVal)] ?? 0.2;
+
+    const simpleActive = Array.from(document.querySelectorAll('.triggers-grid .trigger-wrap')).filter(wrap => {
+      const item = wrap.querySelector('.trigger-item');
+      const hasFreq = wrap.querySelector('.freq-selector,.eat-selector');
+      return item && item.classList.contains('active') && !hasFreq;
+    }).length;
+    const simplePenalty = simpleActive * 0.3;
+
+    const lateWorkP = getTriggerPenalty('latework-freq');
+    const alcoholP  = getTriggerPenalty('alcohol-freq');
+    const screensP  = getTriggerPenalty('screens-freq');
+    const lateEatP  = getTriggerPenalty('eat-freq');
+    const totalTriggerPenalty  = simplePenalty + lateWorkP + alcoholP + screensP + lateEatP;
+    const triggerImpactScore   = simpleActive*1 + (lateWorkP/0.3)*1.2 + (alcoholP/0.3)*1.5 + (screensP/0.3)*1.0 + (lateEatP/0.3)*0.8;
+
+    const durationActive = document.querySelector('#duration-group .toggle-btn.active');
+    const durationMult   = durationActive ? parseFloat(durationActive.dataset.val) : 1.2;
+
+    const actualWeeklyHours   = (weeknight*5) + (weekend*2);
+    const rawDebt             = Math.max(0, (target*7) - actualWeeklyHours);
+    const qualityAdjustedDebt = rawDebt + (qualityLossPerNight*7) + totalTriggerPenalty;
+    const effectiveDebt       = qualityAdjustedDebt * durationMult;
+
+    const nightlyDeficit = Math.max(0, target - weeknight);
+    let baseImpairment;
+    if      (nightlyDeficit <= 0) baseImpairment = 0;
+    else if (nightlyDeficit <= 1) baseImpairment = nightlyDeficit * 8;
+    else if (nightlyDeficit <= 2) baseImpairment = 8 + (nightlyDeficit-1)*10;
+    else                          baseImpairment = 18 + (nightlyDeficit-2)*12;
+
+    const consistencyImpact = consistencyVal === -2 || consistencyVal === '-2' ? 8 : consistencyVal === 0 || consistencyVal === '0' ? 4 : 0;
+    const triggerImpact     = triggerImpactScore * 2.0;
+    let totalImpairment     = Math.min(45, (baseImpairment + consistencyImpact + triggerImpact) * (durationMult * 0.7));
+    totalImpairment = Math.round(totalImpairment);
+    const cogPerformance    = 100 - totalImpairment;
+
+    const baseRecovery  = effectiveDebt <= 0 ? 0 : Math.ceil(effectiveDebt / 0.9);
+    const chronicBuffer = durationMult >= 2.0 ? 10 : durationMult >= 1.5 ? 5 : durationMult >= 1.2 ? 2 : 0;
+    const recoveryDays  = baseRecovery + chronicBuffer;
+
+    renderScoreCards(effectiveDebt, totalImpairment, recoveryDays);
+    renderImpairmentBar(cogPerformance);
+    renderDiagnosis(totalImpairment, effectiveDebt, nightlyDeficit, triggerImpactScore, weeknight, target, durationMult);
+    renderCogTable(totalImpairment, triggerImpactScore);
+    renderSteps(effectiveDebt, nightlyDeficit, weeknight, target, recoveryDays, triggerImpactScore, consistencyVal, lateWorkP, alcoholP, screensP, lateEatP);
+    storeSubmission({ debt: effectiveDebt, impairment: totalImpairment, recovery: recoveryDays });
+    setResultsProgress();
+    const resultsEl = document.getElementById('results');
+    resultsEl.classList.add('visible');
+    document.getElementById('mini-cta').classList.add('visible');
+    document.getElementById('sticky-bar').classList.add('visible');
+    setTimeout(() => resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+  }
+
+  function renderScoreCards(debt, impairment, recovery) {
+    document.getElementById('debt-hours').textContent    = debt.toFixed(1);
+    document.getElementById('impair-pct').textContent    = impairment + '%';
+    document.getElementById('recovery-days').textContent = recovery;
+    const debtLevel   = debt < 3       ? 'safe' : debt < 6       ? 'warning' : 'danger';
+    const impairLevel = impairment < 10 ? 'safe' : impairment < 20 ? 'warning' : 'danger';
+    const recLevel    = recovery < 7    ? 'safe' : recovery < 14   ? 'warning' : 'danger';
+    document.getElementById('debt-card').className     = 'score-card ' + debtLevel;
+    document.getElementById('impair-card').className   = 'score-card ' + impairLevel;
+    document.getElementById('recovery-card').className = 'score-card ' + recLevel;
+  }
+
+  function renderImpairmentBar(perf) {
+    document.getElementById('cpi-pct').textContent = perf;
+    const bar   = document.getElementById('cpi-bar');
+    const color = perf >= 90 ? '#27ae60' : perf >= 75 ? '#c07820' : perf >= 60 ? '#e8a030' : '#c0392b';
+    bar.style.width      = perf + '%';
+    bar.style.background = color;
+  }
+
+  function renderDiagnosis(imp, debt, deficit, triggers, weeknight, target, durationMult) {
+    const card     = document.getElementById('diagnosis-card');
+    const headline = document.getElementById('diagnosis-headline');
+    const body     = document.getElementById('diagnosis-body');
+    let level, title, text;
+    if (imp >= 25 || debt >= 10) {
+      level = 'critical'; title = 'Critical Sleep Debt — Severe Cognitive Compromise';
+      text  = "You are operating with the equivalent cognitive impairment of someone awake for 24–36 consecutive hours. Research shows this level of deficit impairs decision quality to a degree similar to a 0.08% blood alcohol level. Your emotional regulation, strategic thinking, and error detection are all significantly degraded. The insidious part: the more sleep-deprived you are, the less accurately you can perceive your own impairment. You feel like you're functioning. You're not.";
+    } else if (imp >= 15 || debt >= 6) {
+      level = 'high'; title = 'Significant Sleep Debt — High Performance Cost';
+      text  = "You're carrying enough sleep debt to meaningfully compromise your decision-making, creativity, and emotional regulation. Studies show executives at this level are significantly more likely to make reactive rather than strategic decisions. Your prefrontal cortex — the part handling nuanced judgment — is running below capacity. You may not feel tired, but your outputs are paying the price.";
+    } else if (imp >= 8 || debt >= 3) {
+      level = 'moderate'; title = 'Moderate Sleep Debt — Subtle but Real Drag';
+      text  = "You're in the zone most high-achievers live in: not falling asleep in meetings, but not operating at full capacity either. Processing speed, working memory, and creative problem-solving are all slightly but measurably reduced. This is where good enough decisions slip in place of great ones. The good news: you're close to the line, and a focused recovery window gets you there fast.";
+    } else {
+      level = 'low'; title = 'Low Sleep Debt — Optimised Zone';
+      text  = "You're in good shape. Your sleep habits are supporting rather than degrading your performance. The focus now is protecting this baseline — sleep debt accumulates quickly under pressure. Leaders who sustain peak cognitive performance long-term treat sleep like a non-negotiable training protocol, not a luxury.";
+    }
+    card.className       = 'diagnosis-card level-' + level;
+    headline.textContent = title;
+    body.textContent     = text;
+  }
+
+  function renderCogTable(imp, triggers) {
+    const tbody = document.getElementById('cog-tbody');
+    const fns = [
+      { name:'Strategic Decision-Making', threshold:10, impact:'Defaults to short-term, reactive choices over long-horizon thinking' },
+      { name:'Emotional Regulation',      threshold:8,  impact:'Heightened reactivity, lower empathy — compresses psychological safety in your team' },
+      { name:'Working Memory',            threshold:12, impact:'Loses threads mid-conversation, misses important context in complex discussions' },
+      { name:'Creative Problem-Solving',  threshold:15, impact:'Defaults to proven patterns rather than generating novel approaches' },
+      { name:'Risk Assessment',           threshold:10, impact:'Underweights downside scenarios, overconfident in optimistic projections' },
+      { name:'Communication Clarity',     threshold:12, impact:'Less precise, more ambiguous messaging — creates downstream confusion' },
+    ];
+    tbody.innerHTML = fns.map(fn => {
+      const affected = imp >= fn.threshold;
+      return '<tr' + (affected ? ' class="active-row"' : '') + '>'
+        + '<td><strong>' + fn.name + '</strong></td>'
+        + '<td><span class="dot-indicator" style="background:' + (affected ? '#c0392b' : '#27ae60') + '"></span>' + (affected ? 'Degraded' : 'Intact') + '</td>'
+        + '<td style="color:' + (affected ? '#7a3020' : '#4a8060') + ';font-size:12px">' + (affected ? fn.impact : 'Performing normally') + '</td>'
+        + '</tr>';
+    }).join('');
+  }
+
+  function renderSteps(debt, deficit, weeknight, target, recovDays, triggerScore, consistencyVal, lateWorkP, alcoholP, screensP, lateEatP) {
+    const container     = document.getElementById('steps-content');
+    const extraPerNight = Math.min(1.0, debt > 0 ? 0.75 : 0);
+    const newBedtime    = (weeknight + extraPerNight).toFixed(1);
+    let steps = [];
+    if (debt > 0) steps.push({ title:'Add '+extraPerNight.toFixed(1)+'h per night for the next '+Math.min(recovDays,14)+' days', detail:'Your target: '+newBedtime+' hours per night. Gradual extension over 2 weeks is the evidence-backed approach. Earlier bedtime, not sleeping in.' });
+    if (consistencyVal <= 0) steps.push({ title:'Lock in a fixed wake time — non-negotiable', detail:'Pick one wake time and hold it 7 days a week for 2 weeks. Weekend sleep-ins of 90+ minutes reset your internal clock and cost you Monday–Tuesday productivity.' });
+    if (alcoholP >= 0.6) steps.push({ title:'Cut alcohol to 0 for 10 days — your highest-leverage move', detail:'Alcohol is the most potent REM suppressant you regularly consume. Even 2 drinks reduces REM by 20–25%. At '+(alcoholP>=1.0?'nightly':'3–4x/week')+' frequency this alone accounts for a meaningful chunk of your impairment score. Day 5 will feel noticeably different.' });
+    else if (alcoholP > 0) steps.push({ title:'Watch the alcohol frequency this week', detail:'Even occasional alcohol disrupts REM architecture. Keep it to 1x/week max — never within 3h of bed.' });
+    if (lateWorkP >= 0.6) steps.push({ title:'Set a hard stop at 9:45pm', detail:'You are working past 10pm '+(lateWorkP>=1.0?'every night':'3–4 nights a week')+'. Late work keeps cortisol elevated and delays melatonin onset 60–90 minutes. Hard cutoff at 9:45pm with a deliberate wind-down ritual.' });
+    if (screensP >= 0.6) steps.push({ title:'No phone in bed', detail:'Screen use '+(screensP>=1.0?'every night':'3–4x/week')+' delays melatonin onset. A physical book or audio-only podcast is an easy swap most people find sustainable within a week.' });
+    if (lateEatP >= 0.45) steps.push({ title:'Move your last meal to '+(lateEatP>=0.7?'3 hours':'2 hours')+' before bed minimum', detail:'Eating close to bed raises core body temperature — the exact opposite of what triggers deep sleep onset. Finish by 8–8:30pm if you sleep at 10:30–11pm.' });
+    if (lateWorkP < 0.6) steps.push({ title:'Protect 90 minutes before bed as a cognitive wind-down', detail:'Many founders are mentally on until they fall asleep. Checking email at 10:45pm keeps cortisol elevated regardless of how quickly you appear to fall asleep.' });
+    steps.push({ title:'Re-assess in 14 days', detail:'Sleep debt recovery is non-linear. Days 1–3 may feel worse. Day 7–10 is when cognitive clarity returns. Benchmark decision quality and emotional steadiness — not just tiredness.' });
+    container.innerHTML = steps.map((s,i) =>
+      '<div class="step-item"><div class="step-num">0'+(i+1)+'</div><div><div class="step-title">'+s.title+'</div><div class="step-detail">'+s.detail+'</div></div></div>'
+    ).join('');
+  }
+
+  // ── GOOGLE SHEETS — POST ─────────────────────────
+  function storeSubmission(results) {
+    const durationActive = document.querySelector('#duration-group .toggle-btn.active');
+    const duration = durationActive ? durationActive.textContent.trim() : '—';
+    const triggerNames = [];
+    document.querySelectorAll('.triggers-grid .trigger-wrap .trigger-item.active').forEach(t => {
+      triggerNames.push(t.textContent.trim().replace(/\s+/g,' ').substring(0,30));
+    });
+    ['latework-freq','alcohol-freq','screens-freq','eat-freq'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el && el.classList.contains('visible')) {
+        const label = el.previousElementSibling && el.previousElementSibling.textContent.trim().substring(0,20) || id;
+        const freq  = el.querySelector('.freq-btn.active') && el.querySelector('.freq-btn.active').textContent.trim() || '';
+        triggerNames.push(label+' ('+freq+')');
+      }
+    });
+    const utms = getUtms();
+    const record = {
+      action:'write', timestamp:new Date().toLocaleString(),
+      name:gateUser.name, email:gateUser.email,
+      phone:(gateUser.phone && gateUser.phone.trim()) ? gateUser.phone.trim() : 'N/A',
+      role:gateUser.role,
+      sleepDebt:results.debt.toFixed(1), cognitiveImpairment:results.impairment,
+      recoveryDays:results.recovery,
+      weeknightSleep:parseFloat(document.getElementById('weeknight').value).toFixed(1),
+      targetSleep:parseFloat(document.getElementById('target').value).toFixed(1),
+      triggers:triggerNames.join(' | ')||'None', duration,
+      tried: Array.from(document.querySelectorAll('#tried-grid .tried-item.active')).map(i=>i.dataset.bant).join(' | ') || '—',
+      impact: (document.querySelector('#impact-group .toggle-btn.active') || {}).dataset?.bant || '—',
+      utm_source:   utms.utm_source   || '—',
+      utm_campaign: utms.utm_campaign || '—',
+    };
+    fetch(WEBHOOK_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(record) })
+      .catch(err => console.warn('Sheet write failed:',err));
+  }
+
+
+// ── CAPI helper — mirrors browser pixel events server-side ──────────────
+// ── MAILERLITE ───────────────────────────────────
+  async function sendMailerLite(action) {
+    try {
+      await fetch('/.netlify/functions/mailerlite', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+          action,
+          name:  gateUser.name,
+          email: gateUser.email,
+          phone: gateUser.phone,
+          role:  gateUser.role,
+          ...getUtms()
+        })
+      });
+    } catch(e) { console.warn('MailerLite error:', e); }
+  }
+
+async function sha256(str) {
+  if (!str) return null;
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str.trim().toLowerCase()));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+function getCookie(name) {
+  const m = document.cookie.match('(^|;)\\s*'+name+'\\s*=\\s*([^;]+)');
+  return m ? m.pop() : null;
+}
+async function sendCapi(eventName, customData) {
+  try {
+    const emailHash = await sha256(gateUser?.email || '');
+    const phoneHash = await sha256((gateUser?.phone || '').replace(/\D/g,''));
+    await fetch('/.netlify/functions/capi', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        event_name: eventName,
+        custom_data: customData,
+        url: window.location.href,
+        email_hash: emailHash,
+        phone_hash: phoneHash,
+        user_agent: navigator.userAgent,
+        fbc: getCookie('_fbc') || null,
+        fbp: getCookie('_fbp') || null
+      })
+    });
+  } catch(e) { console.warn('CAPI error:', e); }
+}
+
+  // ── ADMIN ────────────────────────────────────────
+  function openAdmin() {
+    document.getElementById('admin-overlay').classList.add('visible');
+    loadAdminData();
+  }
+  function closeAdmin() {
+    document.getElementById('admin-overlay').classList.remove('visible');
+  }
+  async function loadAdminData() {
+    document.getElementById('admin-meta').textContent = 'Loading from Google Sheets...';
+    document.getElementById('admin-tbody').innerHTML = '<tr><td colspan="9"><div class="admin-empty">Fetching submissions...</div></td></tr>';
+    try {
+      const res  = await fetch(WEBHOOK_URL + '?action=read');
+      const data = await res.json();
+      renderAdminDashboard(data.rows || []);
+    } catch(err) {
+      document.getElementById('admin-meta').textContent = 'Could not load — check Apps Script deployment';
+      document.getElementById('admin-tbody').innerHTML = '<tr><td colspan="9"><div class="admin-empty">Error. Ensure Apps Script doGet is deployed with Anyone access.</div></td></tr>';
+    }
+  }
+  function renderAdminDashboard(rows) {
+    const total = rows.length;
+    document.getElementById('stat-total').textContent = total;
+    if (!total) {
+      ['stat-debt','stat-impair'].forEach(id => document.getElementById(id).textContent = '—');
+      document.getElementById('stat-critical').textContent = '0';
+      document.getElementById('admin-meta').textContent = 'No submissions yet';
+      document.getElementById('admin-tbody').innerHTML = '<tr><td colspan="9"><div class="admin-empty">No submissions yet</div></td></tr>';
+      return;
+    }
+    const avgDebt   = rows.reduce((s,r) => s+parseFloat(r[4]||0),0)/total;
+    const avgImpair = rows.reduce((s,r) => s+parseFloat(r[5]||0),0)/total;
+    const critical  = rows.filter(r => parseFloat(r[5]||0)>=25).length;
+    document.getElementById('stat-debt').textContent    = avgDebt.toFixed(1);
+    document.getElementById('stat-impair').textContent  = Math.round(avgImpair)+'%';
+    document.getElementById('stat-critical').textContent= critical;
+    document.getElementById('admin-meta').textContent   = total+' submission'+(total!==1?'s':'')+' · Live from Google Sheets';
+    document.getElementById('admin-tbody').innerHTML = [...rows].reverse().map(r => {
+      const imp = parseFloat(r[6]||0);
+      const bc  = imp>=25?'danger':imp>=15?'warning':'safe';
+      const bl  = imp>=25?'Critical':imp>=15?'High':'Low';
+      return '<tr>'
+        +'<td style="white-space:nowrap;font-size:11px;color:#555">'+(r[0]||'—')+'</td>'
+        +'<td style="color:#ccc;font-weight:500">'+(r[1]||'—')+'</td>'
+        +'<td><a href="mailto:'+(r[2]||'')+'" style="color:#888;text-decoration:none">'+(r[2]||'—')+'</a></td>'
+        +'<td style="color:#777">'+(r[3]||'—')+'</td>'
+        +'<td style="color:#666">'+(r[4]||'—')+'</td>'
+        +'<td style="color:#ccc;font-family:var(--mono)">'+(r[5]||'—')+'h</td>'
+        +'<td><span class="admin-badge '+bc+'">'+(r[6]||'—')+'% · '+bl+'</span></td>'
+        +'<td style="color:#666;font-family:var(--mono)">'+(r[7]||'—')+'d</td>'
+        +'<td style="color:#555">'+(r[11]||'—')+'</td>'
+        +'</tr>';
+    }).join('');
+  }
+  function exportCSV() {
+    fetch(WEBHOOK_URL+'?action=read').then(r=>r.json()).then(data => {
+      const rows = data.rows||[];
+      if (!rows.length) { alert('No data to export yet.'); return; }
+      const headers = ['Timestamp','Name','Email','Phone','Role','Sleep Debt (h)','Impairment (%)','Recovery (days)','Weeknight Sleep','Target Sleep','Triggers','Duration'];
+      const csv = [headers.join(','),...rows.map(r=>r.map(c=>'"'+(c||'')+'"').join(','))].join('\n');
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+      a.download = 'sleep-debt-leads-'+new Date().toISOString().slice(0,10)+'.csv';
+      a.click();
+    }).catch(()=>alert('Export failed.'));
+  }
+</script>
+</body>
+</html>

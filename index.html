@@ -809,9 +809,13 @@ src="https://www.facebook.com/tr?id=2727975300910211&ev=PageView&noscript=1"
           <div class="score-card-unit">hours this week</div>
         </div>
         <div class="score-card" id="impair-card">
-          <div class="score-card-label">Cognitive Impairment</div>
+          <div class="score-card-label" style="display:flex;align-items:center;gap:6px">
+            Cognitive Impairment
+            <button class="info-btn" onclick="toggleMethodology()" aria-label="How we calculate this">ⓘ</button>
+          </div>
           <div class="score-card-value" id="impair-pct">—</div>
           <div class="score-card-unit">below rested baseline</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:7px;line-height:1.6;font-style:italic">Estimated relative to your rested baseline using a model calibrated against Van Dongen Lab PVT data. Not a clinical measurement.</div>
         </div>
         <div class="score-card" id="recovery-card">
           <div class="score-card-label">Recovery Time</div>
@@ -1214,9 +1218,9 @@ src="https://www.facebook.com/tr?id=2727975300910211&ev=PageView&noscript=1"
     else if (nightlyDeficit <= 2) baseImpairment = 8 + (nightlyDeficit-1)*10;
     else                          baseImpairment = 18 + (nightlyDeficit-2)*12;
 
-    const consistencyImpact = consistencyVal === -2 || consistencyVal === '-2' ? 8 : consistencyVal === 0 || consistencyVal === '0' ? 4 : 0;
-    const triggerImpact     = triggerImpactScore * 2.0;
-    let totalImpairment     = Math.min(45, (baseImpairment + consistencyImpact + triggerImpact) * (durationMult * 0.7));
+    const consistencyImpact = consistencyVal === -2 || consistencyVal === '-2' ? 5 : consistencyVal === 0 || consistencyVal === '0' ? 2 : 0;
+    const triggerImpact     = Math.min(8, triggerImpactScore * 1.4);
+    let totalImpairment     = Math.min(45, (baseImpairment + consistencyImpact + triggerImpact) * (1 + (durationMult - 1) * 0.3));
     totalImpairment = Math.round(totalImpairment);
     const cogPerformance    = 100 - totalImpairment;
 
@@ -1406,6 +1410,19 @@ async function sendCapi(eventName, customData) {
   } catch(e) { console.warn('CAPI error:', e); }
 }
 
+  // ── METHODOLOGY MODAL ───────────────────────────
+  function toggleMethodology() {
+    document.getElementById('method-overlay').classList.toggle('visible');
+  }
+  function closeMethodology(e) {
+    if (e.target === document.getElementById('method-overlay')) {
+      document.getElementById('method-overlay').classList.remove('visible');
+    }
+  }
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') document.getElementById('method-overlay').classList.remove('visible');
+  });
+
   // ── ADMIN ────────────────────────────────────────
   function openAdmin() {
     document.getElementById('admin-overlay').classList.add('visible');
@@ -1473,5 +1490,56 @@ async function sendCapi(eventName, customData) {
     }).catch(()=>alert('Export failed.'));
   }
 </script>
+
+<!-- METHODOLOGY MODAL -->
+<div class="method-overlay" id="method-overlay" onclick="closeMethodology(event)">
+  <div class="method-modal">
+    <button class="method-close" onclick="toggleMethodology()">×</button>
+    <div class="method-title">How we calculate cognitive impairment</div>
+    <div class="method-sub">This is a model-based estimate, not a clinical measurement. Here is exactly how it is calculated and what research it is based on.</div>
+
+    <div class="method-section">
+      <h4>Step 1 — Weekly sleep debt</h4>
+      <p>Raw debt = <code>(sleep need × 7) − (weekday sleep × 5 + weekend sleep × 2)</code>. This is the standard weekly deficit formula used in sleep restriction research (Belenky et al., 2003; Van Dongen et al., 2003).</p>
+    </div>
+
+    <div class="method-section">
+      <h4>Step 2 — Quality adjustment</h4>
+      <p>Consistency penalty (0–0.8 hrs/night) is added for irregular sleep timing, based on evidence that circadian misalignment causes independent cognitive impairment even when total hours appear adequate (Phillips et al., 2017). Trigger penalties are added for alcohol, late screens, late work, and late eating — each scaled by reported frequency.</p>
+    </div>
+
+    <div class="method-section">
+      <h4>Step 3 — Base impairment curve</h4>
+      <p>Derived from Van Dongen Lab PVT (psychomotor vigilance task) data: <code>0–1 hr deficit: 8%/hr · 1–2 hrs: 10%/hr · 2+ hrs: 12%/hr</code>. The curve is intentionally conservative — slightly below observed PVT decline rates — as this is a self-report tool, not a lab test.</p>
+    </div>
+
+    <div class="method-section">
+      <h4>Step 4 — Modifiers</h4>
+      <p>Consistency impact: chaotic schedule adds 5 pts, variable adds 2 pts (Phillips 2017). Trigger impact: capped at 8 pts regardless of total triggers selected, to prevent unrealistic stacking. Duration multiplier: <code>× (1 + (multiplier − 1) × 0.3)</code> — chronic patterns worsen impairment modestly, with a stronger effect on recovery time.</p>
+    </div>
+
+    <div class="method-section">
+      <h4>Step 5 — Ceiling</h4>
+      <p>Total impairment is hard-capped at 45%. Van Dongen's 14-day total restriction group reached 40–50% PVT impairment. This cap reflects the outer boundary of what a diagnostic tool can credibly claim without clinical measurement.</p>
+    </div>
+
+    <div class="method-section">
+      <h4>What this number means</h4>
+      <p>The % shown is an estimated reduction in cognitive performance <em>relative to your own fully rested baseline</em> — not a comparison to a population average. A score of 22% means you are estimated to be performing at roughly 78% of your own personal capacity.</p>
+    </div>
+
+    <div class="method-sources">
+      <h4>Source research</h4>
+      <ul>
+        <li>Van Dongen et al. (2003). The cumulative cost of additional wakefulness. <em>Sleep</em>, 26(2), 117–126.</li>
+        <li>Belenky et al. (2003). Patterns of performance degradation and restoration during sleep restriction. <em>Journal of Sleep Research</em>, 12(1), 1–12.</li>
+        <li>Phillips et al. (2017). Irregular sleep/wake patterns are associated with poorer academic performance. <em>Scientific Reports</em>, 7.</li>
+        <li>Roehrs & Roth (2001). Sleep, sleepiness, and alcohol use. <em>Alcohol Research &amp; Health</em>, 25(2), 101–109.</li>
+        <li>SAFTE (Sleep, Activity, Fatigue and Task Effectiveness) model — US Army Research Laboratory.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

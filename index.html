@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- build: 2026-03-12 14:30 -->
+<!-- build: 2026-03-19 v8 -->
 <meta charset="UTF-8">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
@@ -358,6 +358,26 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.15)}
 
 /* Mobile tap */
 .toggle-btn,.stepper-btn,.trigger-item,.tried-item,.role-pill,.calc-btn,.gate-submit{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+
+/* METHODOLOGY MODAL */
+.method-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;align-items:center;justify-content:center;padding:20px}
+.method-overlay.visible{display:flex}
+.method-modal{background:var(--white);border-radius:4px;padding:28px 28px 24px;max-width:540px;width:100%;max-height:85vh;overflow-y:auto;position:relative}
+.method-close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);line-height:1;padding:0;font-family:var(--sans)}
+.method-close:hover{color:var(--black)}
+.method-title{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--black);margin-bottom:4px}
+.method-sub{font-size:12px;color:var(--muted);margin-bottom:20px;font-style:italic;line-height:1.6}
+.method-section{margin-bottom:18px}
+.method-section h4{font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.method-section p{font-size:13px;color:var(--sub);line-height:1.75;margin:0}
+.method-section code{font-family:var(--mono);font-size:11px;background:var(--cream);padding:2px 5px;border-radius:2px;color:var(--text)}
+.method-sources{border-top:1px solid var(--border);padding-top:14px;margin-top:4px}
+.method-sources h4{font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.method-sources ul{list-style:none;padding:0;margin:0}
+.method-sources li{font-size:12px;color:var(--muted);line-height:1.7;padding-left:12px;position:relative}
+.method-sources li::before{content:"—";position:absolute;left:0;color:var(--border)}
+@media(max-width:600px){.method-modal{padding:22px 18px 20px}}
+
 </style>
 <!-- Meta Pixel Code -->
 <script>
@@ -809,13 +829,13 @@ src="https://www.facebook.com/tr?id=2727975300910211&ev=PageView&noscript=1"
           <div class="score-card-unit">hours this week</div>
         </div>
         <div class="score-card" id="impair-card">
-          <div class="score-card-label" style="display:flex;align-items:center;gap:6px">
+          <div class="score-card-label" style="display:flex;align-items:center;gap:7px">
             Cognitive Impairment
-            <button class="info-btn" onclick="toggleMethodology()" aria-label="How we calculate this">ⓘ</button>
+            <span onclick="toggleMethodology()" title="How we calculate this" style="width:15px;height:15px;border-radius:50%;border:1.5px solid var(--muted);color:var(--muted);font-size:9px;font-family:var(--sans);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1;transition:all .15s;user-select:none" onmouseover="this.style.borderColor='var(--black)';this.style.color='var(--black)'" onmouseout="this.style.borderColor='var(--muted)';this.style.color='var(--muted)'">i</span>
           </div>
           <div class="score-card-value" id="impair-pct">—</div>
           <div class="score-card-unit">below rested baseline</div>
-          <div style="font-size:10px;color:var(--muted);margin-top:7px;line-height:1.6;font-style:italic">Estimated relative to your rested baseline using a model calibrated against Van Dongen Lab PVT data. Not a clinical measurement.</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.65;font-family:var(--sans)">Estimated relative to your rested baseline using a model calibrated against Van Dongen Lab PVT data.</div>
         </div>
         <div class="score-card" id="recovery-card">
           <div class="score-card-label">Recovery Time</div>

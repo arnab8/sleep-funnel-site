@@ -1,0 +1,29 @@
+[build]
+  functions = "netlify/functions"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[redirects]]
+  from = "/apply"
+  to = "/apply/"
+  status = 301
+
+[[redirects]]
+  from = "/congrats"
+  to = "/congrats/"
+  status = 301
+
+[[redirects]]
+  from = "/quiz"
+  to = "/"
+  status = 200
+
+[[redirects]]
+  from = "/quiz/"
+  to = "/"
+  status = 200
